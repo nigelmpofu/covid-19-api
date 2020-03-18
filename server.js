@@ -10,6 +10,8 @@ app.use(cors());
 
 app.use('/', express.static('www'));
 
+const PORT = 9119; // API server port
+
 var getall = setInterval(async () => {
   let response;
   try {
@@ -41,7 +43,7 @@ var getall = setInterval(async () => {
 
   db.set("all", result);
   console.log("Updated The Cases", result);
-}, 600000);
+}, 3600);
 
 var getcountries = setInterval(async () => {
   let response;
@@ -77,6 +79,7 @@ var getcountries = setInterval(async () => {
   const criticalColIndex = 7;
 
   // minus totalColumns to skip last row, which is total
+  console.log(countriesTableCells.length);
   for (let i = 0; i < countriesTableCells.length - totalColumns; i += 1) {
     const cell = countriesTableCells[i];
     
@@ -156,7 +159,7 @@ var getcountries = setInterval(async () => {
 
   db.set("countries", result);
   console.log("Updated The Countries", result);
-}, 600000);
+}, 3600);
 
 app.get("/", async function(request, response) {
   let a = await db.fetch("all");
@@ -165,7 +168,7 @@ app.get("/", async function(request, response) {
   );
 });
 
-var listener = app.listen(process.env.PORT, function() {
+var listener = app.listen(PORT, function() {
   console.log("Your app is listening on port " + listener.address().port);
 });
 
