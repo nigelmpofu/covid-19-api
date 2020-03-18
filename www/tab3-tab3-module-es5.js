@@ -15,7 +15,7 @@
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "<ion-header [translucent]=\"true\">\n  <ion-toolbar>\n    <ion-title>\n      About\n    </ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content [fullscreen]=\"true\">\n  <ion-header collapse=\"condense\">\n    <ion-toolbar>\n      <ion-title size=\"large\">About</ion-title>\n    </ion-toolbar>\n  </ion-header>\n  <ion-item>\n    <ion-label>\n      <p>Information from www.worldometers.info</p>\n    </ion-label>\n  </ion-item>\n  <ion-item>\n    <ion-avatar slot=\"start\">\n      <ion-icon name=\"logo-github\"></ion-icon> \n    </ion-avatar>\n    <ion-label>\n      <h2><a href=\"https://github.com/javieraviles\">Author: Javier Aviles</a></h2>\n    </ion-label>\n  </ion-item>\n</ion-content>";
+    __webpack_exports__["default"] = "<ion-header [translucent]=\"true\">\n  <ion-toolbar>\n    <ion-title>\n      About\n    </ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content [fullscreen]=\"true\">\n  <ion-header collapse=\"condense\">\n    <ion-toolbar>\n      <ion-title size=\"large\">About</ion-title>\n    </ion-toolbar>\n  </ion-header>\n  <ion-item>\n    <ion-label>\n      <p>Information from www.worldometers.info</p>\n    </ion-label>\n  </ion-item>\n  </ion-content>";
     /***/
   },
 

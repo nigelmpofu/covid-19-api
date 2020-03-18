@@ -1,10 +1,10 @@
 {
-  "name": "COVID-API",
+  "name": "COVID-19-API",
   "version": "1.0.0",
   "description": "A simple Node API for getting coronavirus cases from scraped information.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "PORT=9119 node server.js",
     "build-frontend": "cd frontend && ionic build --engine=browser"
   },
   "dependencies": {
@@ -16,12 +16,13 @@
     "request": "*"
   },
   "repository": {
-    "url": "https://github.com/javieraviles/covidAPI"
+    "url": "https://github.com/nigelmpofu/covid-19-api"
   },
   "license": "MIT",
   "keywords": [
     "API",
     "coronavirus",
-    "covid"
+    "covid",
+    "covid-19"
   ]
 }
