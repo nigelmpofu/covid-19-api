@@ -43,7 +43,7 @@ var getall = setInterval(async () => {
 
   db.set("all", result);
   console.log("Updated The Cases", result);
-}, 3600000);
+}, 1800000);
 
 var getcountries = setInterval(async () => {
   let response;
@@ -61,7 +61,7 @@ var getcountries = setInterval(async () => {
 
   // get HTML and parse death rates
   const html = cheerio.load(response.data);
-  const countriesTable = html("table#main_table_countries");
+  const countriesTable = html("table#main_table_countries_today");
   const countriesTableCells = countriesTable
     .children("tbody")
     .children("tr")
@@ -77,9 +77,9 @@ var getcountries = setInterval(async () => {
   const curedColIndex = 5;
   const activeColIndex = 6;
   const criticalColIndex = 7;
+  const casesPerOneMillionColIndex = 8;
 
   // minus totalColumns to skip last row, which is total
-  console.log(countriesTableCells.length);
   for (let i = 0; i < countriesTableCells.length - totalColumns; i += 1) {
     const cell = countriesTableCells[i];
     
@@ -101,7 +101,7 @@ var getcountries = setInterval(async () => {
     }
     // get cases
     if (i % totalColumns === casesColIndex) {
-      let cases = cell.children[0].data || "";
+      let cases = cell.children.length != 0 ? cell.children[0].data : "";
       result[result.length - 1].cases = parseInt(
         cases.trim().replace(/,/g, "") || "0",
         10
@@ -109,7 +109,7 @@ var getcountries = setInterval(async () => {
     }
     // get today cases
     if (i % totalColumns === todayCasesColIndex) {
-      let cases = cell.children[0].data || "";
+      let cases = cell.children.length != 0 ? cell.children[0].data : "";
       result[result.length - 1].todayCases = parseInt(
         cases.trim().replace(/,/g, "") || "0",
         10
@@ -117,7 +117,7 @@ var getcountries = setInterval(async () => {
     }
     // get deaths
     if (i % totalColumns === deathsColIndex) {
-      let deaths = cell.children[0].data || "";
+      let deaths = cell.children.length != 0 ? cell.children[0].data : "";
       result[result.length - 1].deaths = parseInt(
         deaths.trim().replace(/,/g, "") || "0",
         10
@@ -125,7 +125,7 @@ var getcountries = setInterval(async () => {
     }
     // get today deaths
     if (i % totalColumns === todayDeathsColIndex) {
-      let deaths = cell.children[0].data || "";
+      let deaths = cell.children.length != 0 ? cell.children[0].data : "";
       result[result.length - 1].todayDeaths = parseInt(
         deaths.trim().replace(/,/g, "") || "0",
         10
@@ -133,7 +133,7 @@ var getcountries = setInterval(async () => {
     }
     // get cured
     if (i % totalColumns === curedColIndex) {
-      let cured = cell.children[0].data || 0;
+      let cured = cell.children.length != 0 ? cell.children[0].data : "";
       result[result.length - 1].recovered = parseInt(
         cured.trim().replace(/,/g, "") || 0,
         10
@@ -141,7 +141,7 @@ var getcountries = setInterval(async () => {
     }
     // get active
     if (i % totalColumns === activeColIndex) {
-      let cured = cell.children[0].data || 0;
+      let cured =cell.children.length != 0? cell.children[0].data : "";
       result[result.length - 1].active = parseInt(
         cured.trim().replace(/,/g, "") || 0,
         10
@@ -149,9 +149,17 @@ var getcountries = setInterval(async () => {
     }
     // get critical
     if (i % totalColumns === criticalColIndex) {
-      let critical = cell.children[0].data || "";
+      let critical = cell.children.length != 0 ? cell.children[0].data : "";
       result[result.length - 1].critical = parseInt(
         critical.trim().replace(/,/g, "") || "0",
+        10
+      );
+    }
+    // get total cases per one million population
+    if (i % totalColumns === casesPerOneMillionColIndex) {
+      let casesPerOneMillion = cell.children.length != 0? cell.children[0].data : "";
+      result[result.length - 1].casesPerOneMillion = parseInt(
+        casesPerOneMillion.trim().replace(/,/g, "") || "0",
         10
       );
     }
@@ -159,7 +167,7 @@ var getcountries = setInterval(async () => {
 
   db.set("countries", result);
   console.log("Updated The Countries", result);
-}, 3600000);
+}, 1800000);
 
 app.get("/", async function(request, response) {
   let a = await db.fetch("all");
@@ -180,4 +188,16 @@ app.get("/all/", async function(req, res) {
 app.get("/countries/", async function(req, res) {
   let countries = await db.fetch("countries");
   res.send(countries);
+});
+
+app.get("/countries/:country", async function(req, res) {
+  let countries = await db.fetch("countries");
+  let country = countries.find(
+    e => e.country.toLowerCase().includes(req.params.country.toLowerCase())
+  );
+  if (!country) {
+    res.send("Country not found");
+    return;
+  }
+  res.send(country);
 });
