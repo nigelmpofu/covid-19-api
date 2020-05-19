@@ -17,10 +17,10 @@ jobs:
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-    - name: Build Docker image
+    - name: Build Docker Image
       if: success()
       run: docker build . --file Dockerfile --tag nigelmpofu/covid-19-api:latest
-    - name: Build image
+    - name: Push Docker Image
       if: success()
       uses: actions-hub/docker@master
       with:
