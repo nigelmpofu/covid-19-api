@@ -1,0 +1,27 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to docker hub
+      if: success()
+      uses: actions-hub/docker/login@master
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build Docker image
+      if: success()
+      run: docker build . --file Dockerfile --tag nigelmpofu/covid-19-api:latest
+    - name: Build image
+      if: success()
+      uses: actions-hub/docker@master
+      with:
+        args: push ${GITHUB_REPOSITORY}:${IMAGE_TAG}
